@@ -67,3 +67,37 @@ ggplot(penguins_clean, aes(x = body_mass_g, y = Predicted_Prob, color = species)
        x = "Body Mass (g)",
        y = "Predicted Probability") +
   theme_minimal()
+
+
+### Try set another species: Gentoo
+penguins_clean$Is_Gentoo <- as.integer(penguins_clean$species == "Gentoo")
+
+
+# Fit a binomial generalized linear mixed model
+binomial_glmm <- glmer(Is_Gentoo ~ body_mass_g + flipper_length_mm + (1 | island),
+                       family = binomial(link = "logit"), data = penguins_clean)
+
+# Model summary
+summary(binomial_glmm)
+
+# Model development: add bill length and bill depth as predictors
+binomial_glmm2 <- glmer(Is_Gentoo ~ body_mass_g + flipper_length_mm + bill_length_mm + bill_depth_mm + (1 | island),
+                        family = binomial(link = "logit"), data = penguins_clean,
+                        control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 1e5)))
+
+# Model summary
+summary(binomial_glmm2)
+
+# Model comparison using AIC
+AIC(binomial_glmm,binomial_glmm2)
+
+# Visualize model predictions
+penguins_clean$Predicted_Prob <- predict(binomial_glmm2, type = "response")
+
+ggplot(penguins_clean, aes(x = body_mass_g, y = Predicted_Prob, color = species)) +
+  geom_point() +
+  labs(title = "Predicted Probability of Being Gentoo",
+       x = "Body Mass (g)",
+       y = "Predicted Probability") +
+  theme_minimal()
+
