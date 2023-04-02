@@ -16,3 +16,5 @@ Two generalized linear mixed models are implemented, one uses weights and length
 When Adelie is the target species, I found the model with length and gepth of bill has much smaller AIC (16) than without them (201). Thus, we can conclude that the length and gepth of bill is important to classify Adelie species.
 
 On the other hand, when Gentoo is the target species, the same two models are impenmented. The model with length and gepth of bill also has a smaller AIC (12) than without them (17). However, the AICs are not very differnt like when Adelie is the target species. Thus we believe that weight and length of flipper are good to classify Gentoo, althought adding length and gepth of bill can improve the model fit.
+
+Besides, DHARMa package is used to inspected the residual plots. From the QQ plot, there's no significant results to reject the normal distribution of residual. 
