@@ -3,7 +3,7 @@ library(tidyverse)
 library(lme4)
 library(palmerpenguins)
 library(ggplot2)
-
+library(DHARMa)
 # Load the dataset
 data(penguins)
 
@@ -101,3 +101,11 @@ ggplot(penguins_clean, aes(x = body_mass_g, y = Predicted_Prob, color = species)
        y = "Predicted Probability") +
   theme_minimal()
 
+
+# Model assumptions checking using DHARMa package
+binomial_glmm2_res <- simulateResiduals(binomial_glmm2)
+plot(binomial_glmm2_res)
+testUniformity(binomial_glmm2_res)
+testOutliers(binomial_glmm2_res)
+testDispersion(binomial_glmm2_res)
+testZeroInflation(binomial_glmm2_res)
